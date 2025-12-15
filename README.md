@@ -49,7 +49,7 @@ Optional data 2 | Optional personal data at the discretion of the issuing State.
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/appintheair/MRZParser.git", .upToNextMajor(from: "1.1.2"))
+    .package(url: "https://github.com/appintheair/MRZParser.git", .upToNextMajor(from: "1.1.4"))
 ]
 ```
 
