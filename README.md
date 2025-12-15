@@ -1,8 +1,9 @@
 [![Build and test](https://github.com/datacheckerbv/MRZParser/actions/workflows/Build%20and%20test.yml/badge.svg)](https://github.com/datacheckerbv/MRZParser/actions/workflows/Build%20and%20test.yml)
-[![codecov](https://codecov.io/gh/appintheair/MRZParser/branch/develop/graph/badge.svg?token=XS5F9MtSfq)](https://codecov.io/gh/appintheair/MRZParser)
 [![spm](https://img.shields.io/badge/SPM-compatible-brightgreen.svg)](https://github.com/datacheckerbv/MRZParser/blob/develop/Package.swift)
 
 # MRZParser
+
+> **Fork Notice:** This is a fork of [appintheair/MRZParser](https://github.com/appintheair/MRZParser), maintained by [datacheckerbv](https://github.com/datacheckerbv). See [This Fork](#this-fork) section for key changes and additions.
 
 Powerful [MRZ](https://en.wikipedia.org/wiki/Machine-readable_passport) code parser supporting a wide range of travel and identity documents:
 
@@ -25,7 +26,7 @@ Powerful [MRZ](https://en.wikipedia.org/wiki/Machine-readable_passport) code par
 
 ## Fields Distribution of Official Travel Documents
 
-![image](https://raw.githubusercontent.com/appintheair/MRZParser/develop/docs/img/Fields_Distribution.png)
+![image](https://raw.githubusercontent.com/datacheckerbv/MRZParser/develop/docs/img/Fields_Distribution.png)
 
 ### Fields description
 
@@ -33,10 +34,10 @@ Field | TD1 description | TD2 description | TD3 description | MRVA description |
 ----- | --------------- | --------------- | --------------- | ---------------- | ---------------- | --------------
 Document type | The first letter shall be 'I', 'A' or 'C' |  <- | Normally 'P' for passport | The First letter must be 'V' | <- | The first letter shall be 'D' (for Driving License)
 Country code | 3 letters code (ISO 3166-1) or country name (in English) | <- | <- | <- | <- | 3 letters code (ISO 3166-1)
-Document number | Document number | <- | <- | <- | <- | Document number (up to 25 chars, ISO/IEC 18013-1)
-Birth date | Format: YYMMDD | <- | <- | <- | <- | Format: YYMMDD
+Document number | Document number | <- | <- | <- | <- | Document number (up to 10 chars, current implementation; ISO/IEC 18013-1 allows up to 25)
+Birth date | Format: YYMMDD | <- | <- | <- | <- | Not extracted by parser
 Sex | Genre. Male: 'M', Female: 'F' or Undefined: 'X', "<" or "" | <- | <- | <- | <- | 'M', 'F', 'X', '<' or ''
-Expiry date  | Format: YYMMDD | <- | <- | <- | <- | Format: YYMMDD
+Expiry date  | Format: YYMMDD | <- | <- | <- | <- | Not extracted by parser
 Nationality | 3 letters code (ISO 3166-1) or country name (in English) | <- | <- | <- | <- | 3 letters code (ISO 3166-1)
 Surname | Holder primary identifier(s) | <- | Primary identifier(s) | <- | <- | Holder primary identifier(s)
 Given names | Holder secondary identifier(s) | <- | Secondary identifier(s) | <- | <- | Holder secondary identifier(s)
@@ -49,7 +50,7 @@ Optional data 2 | Optional personal data at the discretion of the issuing State.
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/appintheair/MRZParser.git", .upToNextMajor(from: "1.1.4"))
+    .package(url: "https://github.com/datacheckerbv/MRZParser.git", from: "1.2.0")
 ]
 ```
 
@@ -163,9 +164,7 @@ Composite check digit | 3
 #### Input
 
 ```txt
-D<NLD1234567890123456789012345<
-8001012M2501012NLD<<<<<<<<<<<6
-DOE<<JOHN<<<<<<<<<<<<<<<<<<<<<
+D1NLD15094962111659VW87Z78NB84
 ```
 
 #### Driving License (DL) Output
@@ -174,18 +173,18 @@ Field | Value
 ----- | -----
 Document type | D
 Country code | NLD
-Document number | 1234567890123456789012345
-Birth date | 1980.01.01
-Sex | MALE
-Expiry date | 2025.01.01
-Nationality | NLD
-Surname | DOE
-Given names | JOHN
-Optional data | ""
+Document number | 5094962111
+Birth date | ""
+Sex | ""
+Expiry date | ""
+Nationality | ""
+Surname | ""
+Given names | ""
+Optional data | "659VW87Z78NB8"
 Optional data 2 | ""
-rawMRZLines | ["D<NLD1234567890123456789012345<", "8001012M2501012NLD<<<<<<<<<<<6", "DOE<<JOHN<<<<<<<<<<<<<<<<<<<<<"]
+rawMRZLines | ["D1NLD15094962111659VW87Z78NB84"]
 isValid | true
-Composite check digit | 6
+Composite check digit | 4
 
 ### TD2
 
@@ -304,6 +303,27 @@ isValid | true
 Document number check digit | 4
 Birthdate check digit | 8
 Expiry date check digit | 9
+
+## This Fork
+
+This fork is maintained by [datacheckerbv](https://github.com/datacheckerbv) and was created on 2025-12-15 from [appintheair/MRZParser](https://github.com/appintheair/MRZParser).
+
+### Key Changes and Additions
+
+- **Driving License (DL) Support**: Added full parsing support for ISO/IEC 18013-1 Driving License format (single-line MRZ)
+- **Enhanced Test Coverage**: Ported comprehensive test suite from the [Go MRZ reference package](https://github.com/datacheckerbv/mrz), including all edge cases and country-specific formats
+- **Validation Transparency**:
+  - Added `isValid` boolean field to `MRZResult` to indicate validation status
+  - Parser now returns results even for invalid MRZ instead of returning `nil`
+  - All check digits (document number, birthdate, expiry date, composite) exposed in result
+- **Debug Mode**: Added optional `debug` flag to parser initialization that prints check digit comparisons (parsed vs. calculated) to console with ✓/✗ indicators
+- **Raw MRZ Preservation**: Added `rawMRZLines` array to `MRZResult` containing the original MRZ input
+- **Country-Specific Logic**: Enhanced TD1 parsing for Belgium (BEL) and Portugal (PRT) 13-character extended document numbers
+- **Privacy Features**: Optional data sanitization for sensitive fields (e.g., NLD BSN)
+
+### Upstream Synchronization
+
+This fork maintains the original MIT license and preserves attribution to the original authors. For issues specific to this fork's additions (DL parsing, debug mode, test suite), please [open an issue here](https://github.com/datacheckerbv/MRZParser/issues). For issues with the core MRZ parsing logic that affects the upstream project, consider reporting to [appintheair/MRZParser](https://github.com/appintheair/MRZParser/issues).
 
 ## License
 
