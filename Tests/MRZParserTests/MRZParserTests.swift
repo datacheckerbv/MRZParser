@@ -9,7 +9,7 @@ import XCTest
 @testable import MRZParser
 
 final class MRZParserTests: XCTestCase {
-    private var parser: MRZParser!
+    private var parser: MRZDecoder!
 
     private let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -21,7 +21,7 @@ final class MRZParserTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        parser = MRZParser(isOCRCorrectionEnabled: true, debug: false)
+        parser = MRZDecoder(isOCRCorrectionEnabled: true, debug: false)
     }
 
     func testTD1() {
@@ -66,7 +66,7 @@ final class MRZParserTests: XCTestCase {
                         """
         
         // Create parser with debug enabled to see check digit comparison in console
-        let debugParser = MRZParser(isOCRCorrectionEnabled: true, debug: true)
+        let debugParser = MRZDecoder(isOCRCorrectionEnabled: true, debug: true)
         let result = debugParser.parse(mrzString: mrzString)
         
         XCTAssertNotNil(result)
@@ -90,7 +90,7 @@ final class MRZParserTests: XCTestCase {
                         """
         
         // Create parser with debug enabled to see which check digit is wrong
-        let debugParser = MRZParser(isOCRCorrectionEnabled: true, debug: true)
+        let debugParser = MRZDecoder(isOCRCorrectionEnabled: true, debug: true)
         let result = debugParser.parse(mrzString: mrzString)
         
         XCTAssertNotNil(result)

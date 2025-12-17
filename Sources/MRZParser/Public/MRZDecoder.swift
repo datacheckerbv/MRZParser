@@ -1,13 +1,14 @@
 //
-//  MRZParser.swift
+//  MRZDecoder.swift
 //
 //
-//  Created by Roman Mazeev on 15.06.2021.
+//  MRZParser.swift Created by Roman Mazeev on 15.06.2021.
+//  Modified by Fabian Afatsawo on 17.12.2025 to MRZDecoder.swift to prevent module/type collision
 //
 
 import Foundation
 
-public struct MRZParser {
+public struct MRZDecoder {
     private let formatter: MRZFieldFormatter
     private let debug: Bool
 
