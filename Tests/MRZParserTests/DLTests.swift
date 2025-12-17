@@ -9,11 +9,11 @@ import XCTest
 @testable import MRZParser
 
 final class DLTests: XCTestCase {
-    private var parser: MRZParser!
+    private var parser: MRZDecoder!
 
     override func setUp() {
         super.setUp()
-        parser = MRZParser(isOCRCorrectionEnabled: true, debug: false)
+        parser = MRZDecoder(isOCRCorrectionEnabled: true, debug: false)
     }
 
     func testDL_Valid() {
@@ -48,7 +48,7 @@ final class DLTests: XCTestCase {
         let line = "D1NLD15094962111659VW87Z78NB85"
         
         // Create parser with debug enabled to see check digit comparison
-        let debugParser = MRZParser(isOCRCorrectionEnabled: true, debug: true)
+        let debugParser = MRZDecoder(isOCRCorrectionEnabled: true, debug: true)
         let result = debugParser.parse(mrzString: line)
         
         // Parser returns result even when check digit is wrong

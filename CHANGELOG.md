@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.2.0] - 2025-12-15
+## [1.2.0] - 2025-12-17
 
 ### Added
 
@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Parser Behavior**: Parser no longer returns `nil` for invalid MRZ; instead returns `MRZResult` with `isValid: false`
 - Updated all test cases to include `isValid` field and check digit assertions
 - Enhanced documentation with debug mode examples and check digit usage
+- Rename public parsing type `MRZParser` → `MRZDecoder` to avoid a module/type name collision that broke `.swiftinterface` generation for library-distribution builds (XCFramework / `BUILD_LIBRARY_FOR_DISTRIBUTION=YES`).  
 
 ### Fixed
 
